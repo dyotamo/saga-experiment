@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: profiledb
+  name: profiledb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: profiledb
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: profiledb
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: profile
+            - name: POSTGRES_PASSWORD
+              value: passwd
+            - name: POSTGRES_USER
+              value: user
+          image: postgres:14
+          name: profiledb
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: notification
+  name: notification
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notification
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: notification
+    spec:
+      containers:
+        - env:
+            - name: QUARKUS_MAILER_HOST
+              value: mailcatcher.default.svc.cluster.local
+            - name: QUARKUS_RABBITMQCLIENT_HOSTNAME
+              value: rabbitmq.default.svc.cluster.local
+            - name: QUARKUS_RABBITMQCLIENT_PORT
+              value: "5672"
+            - name: QUARKUS_RABBITMQCLIENT_VIRTUAL_HOST
+              value: /
+          image: dyotamo/saga-experiment-user-notification-service:1.0.0
+          name: notification
+          resources: {}
+      restartPolicy: Always
+status: {}

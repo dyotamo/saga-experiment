@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: requestdb
+  name: requestdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: requestdb
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: requestdb
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: request
+            - name: POSTGRES_PASSWORD
+              value: passwd
+            - name: POSTGRES_USER
+              value: user
+          image: postgres:14
+          name: requestdb
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  request_db:
+  requestdb:
     image: postgres:14
     environment:
       - POSTGRES_PASSWORD=passwd
       - POSTGRES_USER=user
       - POSTGRES_DB=request
 
-  profile_db:
+  profiledb:
     image: postgres:14
     environment:
       - POSTGRES_PASSWORD=passwd
@@ -33,15 +33,11 @@ services:
       - QUARKUS_DATASOURCE_DB_KIND=postgresql
       - QUARKUS_DATASOURCE_USERNAME=user
       - QUARKUS_DATASOURCE_PASSWORD=passwd
-      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://request_db:5432/request
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://requestdb:5432/request
       - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=drop-and-create
       - QUARKUS_RABBITMQCLIENT_VIRTUAL_HOST=/
       - QUARKUS_RABBITMQCLIENT_HOSTNAME=rabbitmq
       - QUARKUS_RABBITMQCLIENT_PORT=5672
-    depends_on:
-      - rabbitmq
-      - request_db
-    restart: on-failure
 
   profile:
     image: dyotamo/saga-experiment-user-profile-service:1.0.0
@@ -49,15 +45,11 @@ services:
       - QUARKUS_DATASOURCE_DB_KIND=postgresql
       - QUARKUS_DATASOURCE_USERNAME=user
       - QUARKUS_DATASOURCE_PASSWORD=passwd
-      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://profile_db:5432/profile
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://profiledb:5432/profile
       - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=drop-and-create
       - QUARKUS_RABBITMQCLIENT_VIRTUAL_HOST=/
       - QUARKUS_RABBITMQCLIENT_HOSTNAME=rabbitmq
       - QUARKUS_RABBITMQCLIENT_PORT=5672
-    depends_on:
-      - rabbitmq
-      - profile_db
-    restart: on-failure
 
   account:
     image: dyotamo/saga-experiment-user-account-service:1.0.0
@@ -65,9 +57,6 @@ services:
       - QUARKUS_RABBITMQCLIENT_VIRTUAL_HOST=/
       - QUARKUS_RABBITMQCLIENT_HOSTNAME=rabbitmq
       - QUARKUS_RABBITMQCLIENT_PORT=5672
-    depends_on:
-      - rabbitmq
-    restart: on-failure
 
   notification:
     image: dyotamo/saga-experiment-user-notification-service:1.0.0
@@ -76,7 +65,3 @@ services:
       - QUARKUS_RABBITMQCLIENT_HOSTNAME=rabbitmq
       - QUARKUS_RABBITMQCLIENT_PORT=5672
       - QUARKUS_MAILER_HOST=mailcatcher
-    depends_on:
-      - rabbitmq
-      - mailcatcher
-    restart: on-failure
